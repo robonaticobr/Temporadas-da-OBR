@@ -1,6 +1,8 @@
 #define eLED    22
-#define dLED    30 
+#define dLED    30
+#define LED_R   24
 #define LED_G   26
+#define LED_B   28
 
 int vdE = A15;
 int vdD = A14;
@@ -10,7 +12,7 @@ uint8_t bD1 = 9;
 uint8_t bU1 = 25;
 uint8_t bU2 = 23;
 
-int VE = 55;
+int VE = 58;
 int DV = 22;
 int VP = 300;
 
@@ -18,6 +20,9 @@ void setup()
 {
   pinMode(eLED, OUTPUT);
   pinMode(dLED, OUTPUT);
+  pinMode(LED_B, OUTPUT);
+  pinMode(LED_G, OUTPUT);
+  pinMode(LED_R, OUTPUT);
 
   pinMode(vdE, INPUT_PULLUP);       // IMPORTANTE: A SOMA DE LEITURAS SÓ FUNCIONA COM OS PINOS
   pinMode(vdD, INPUT_PULLUP);     // CONFIGURADOS COMO PULLUP
@@ -32,33 +37,66 @@ void setup()
 
 void loop()
 {
+  digitalWrite(LED_R, LOW);
+
   bD2 = digitalRead(8);
   bD1 = digitalRead(9);
   bU2 = digitalRead(23);
   bU1 = digitalRead(25);
 
-  if  (bD2 == 1) DV++;
-  while (digitalRead(8) == 1);
-  
-  if  (bD1 == 1) DV--;
-  while (digitalRead(9) == 1);
-  
-  if  (bU1 == 1)  VE++;
-  while (digitalRead(23) == 1);
-  
-  if  (bU2 == 1) VE--;
-  while (digitalRead(25) == 1);
+  if  (bD2 == 1) {
+    DV++;
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_G, LOW);
+    digitalWrite(LED_B, HIGH);
+    digitalWrite(eLED, LOW);
+    digitalWrite(dLED, LOW);
+  }
+  while (digitalRead(8) == 1) A();
+
+  if  (bD1 == 1) {
+    DV--;
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_G, HIGH);
+    digitalWrite(LED_B, LOW);
+    digitalWrite(eLED, LOW);
+    digitalWrite(dLED, LOW);
+  }
+  while (digitalRead(9) == 1) A();
+
+  if  (bU1 == 1)  {
+    VE--;
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_G, LOW);
+    digitalWrite(LED_B, HIGH);
+    digitalWrite(eLED, LOW);
+    digitalWrite(dLED, LOW);
+  }
+  while (digitalRead(25) == 1) A();
+
+  if  (bU2 == 1) {
+    VE++;
+    digitalWrite(LED_R, HIGH);
+    digitalWrite(LED_G, HIGH);
+    digitalWrite(LED_B, LOW);
+    digitalWrite(eLED, LOW);
+    digitalWrite(dLED, LOW);
+  }
+  while (digitalRead(23) == 1) A();
+
 
   if  (mediaE() >= VE)  {
     digitalWrite(eLED, HIGH);
     if  (mediaE() < VP) digitalWrite(LED_G, HIGH);
     else digitalWrite(LED_G, LOW);
   }
+  else {digitalWrite(eLED, LOW); digitalWrite(LED_G, LOW);}
   if  (mediaD() >= DV)  {
     digitalWrite(dLED, HIGH);
     if  (mediaD() < VP) digitalWrite(LED_B, HIGH);
     else digitalWrite(LED_B, LOW);
   }
+  else {digitalWrite(dLED, LOW); digitalWrite(LED_B, LOW);}
 }
 
 long mediaE() {
@@ -78,4 +116,9 @@ long mediaD() {
     JoinD += vdD;
   }
   return JoinD/4 - 100;
+}
+
+void A()  {
+  Serial.print(VE); Serial.print(" | ");
+  Serial.println(DV);
 }
