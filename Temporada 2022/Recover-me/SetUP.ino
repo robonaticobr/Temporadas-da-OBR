@@ -8,6 +8,7 @@ void setup() {
   pinMode(LED_R, OUTPUT);                                                           // Estes dados indicarão a força para os motores
   pinMode(LED_G, OUTPUT); pinMode(eLED, OUTPUT);
   pinMode(LED_B, OUTPUT); pinMode(dLED, OUTPUT);
+  pinMode(10, OUTPUT);
 
   pinMode(Bumper, INPUT_PULLUP);
 
@@ -30,16 +31,8 @@ void setup() {
   serv.detach();
 
   serv.attach(Tail);
-  serv.write(3);
+  serv.write(8);
   delay(300);
-  
-  for (int i = 0; i < 2; i++) {                                                    // Regulagem da posição da alavanca traseira do robô
-    serv.write(25);
-    delay(150);
-    serv.write(6);
-    delay(150);
-  }
-  
   serv.detach();
   Wire.begin();                                                                     // Robô, RECEBA a biblioteca Wire.
   Serial.begin(9600);                                                               // Robô, te apresento o monitor Serial. Vocês se comunicarão a uma velocidade de 9600 bytes de transmissão
@@ -60,9 +53,16 @@ void setup() {
   for (uint8_t i = 0; i <= 100; i++) {
     sharp_L = analogRead(A3);
   }
-  // while (true)  {
-  //   idBase();
-  // };
   angleY = 0.01;
   angleZ = 0.01;
+//  while (true) {
+//    if  (BOLA == false) {
+//      Acc = 0;
+//      for (byte i = 0; i < 5; i++) {
+//        sharp_A = analogRead(A1);
+//        Acc += sharp_A;
+//      }
+//    }
+//    Serial.println(Acc);
+//  };
 }
