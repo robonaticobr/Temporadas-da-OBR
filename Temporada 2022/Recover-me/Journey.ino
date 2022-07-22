@@ -23,7 +23,7 @@ void loop() {
   sharp_L = analogRead(A3) * 0.0048828125;
   gustavoGadao = 26 * pow(sharp_L, -1);
 
-  if  ((Esq == 0) && (Dir == 0))  moverAngYtbm(122, 0, 122, 0);
+  if  ((Esq == 0) && (Dir == 0) && (angleY >= -10.00))  moverAngYtbm(122, 0, 122, 0);
   
   if  (Bumper == 1) {
     eAnt = millis();
@@ -152,104 +152,103 @@ void loop() {
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  if  (angleY <= -15.00)  {
-    MOVE(0, 0, 0, 0); delay(200);
-    while ((angleY >= -35.00) && (angleY <= 1.00)) {
-      Esq = digitalRead(46);
-      Dir = digitalRead(48);
-      if ((Esq == 0) && (Dir == 0)) moverAngYtbm(120, 0, 150, 0);
-      if ((Esq == 1) && (Dir == 0)) moverAngYtbm(120, 0, 150, 0);
-      if ((Esq == 0) && (Dir == 1)) moverAngYtbm(150, 0, 150, 0);
-    }
-    while (angleY <= -6.00) {
-      sharp_L = analogRead(A3) * 0.0048828125;
-      gustavoGadao = 26 * pow(sharp_L, -1);
-
-      Lever = millis();
-      if  (gustavoGadao <= 30) do {
-        Avanc = digitalRead(52);
-        Esq = digitalRead(46);
-        Dir = digitalRead(48);
-        MOVE(0, 130, 160, 0);
-      } while ((Esq == 0) && (Avanc == 0) && (Dir == 0));
-      while  (gustavoGadao <= 30) {
-        serv.attach(Tail);
-        if (millis() - Lever >= 600) serv.write(22);
-        TTR = true;
-        digitalWrite(LED_R, LOW);
-        sharp_L = analogRead(A3) * 0.0048828125;
-        gustavoGadao = 26 * pow(sharp_L, -1);
-        Esq = digitalRead(46);
-        Dir = digitalRead(48);
-        if  (millis() - eAnt >= 200)  {
-          eAnt = millis();
-          digitalWrite(LED_B, !digitalRead(LED_B));
-          digitalWrite(eLED, !digitalRead(eLED));
-          digitalWrite(dLED, !digitalRead(dLED));
-        }
-        if  (((Esq == 0) && (Dir == 0)) || ((Esq == 1) && (Dir == 1)))  moverAngYtbm(210, 0, 210, 0);
-        if  ((Esq == 1) && (Dir == 0) || (extEsq == 1))  moverAngYtbm(0, 120, 190, 0);
-        if  ((Esq == 0) && (Dir == 1) || (extDir == 1))  moverAngYtbm(190, 0, 0, 170);
-      }
-
-      eAnt = millis();
-      while (gustavoGadao > 30)  {
-
-        Esq = digitalRead(46);
-        Dir = digitalRead(48);
-        serv.attach(Tail);
-        serv.write(22);
-        if  (millis() - eAnt > 300) {
-          eAnt = millis();
-          digitalWrite(eLED, !digitalRead(eLED)); digitalWrite(dLED, !digitalRead(dLED));
-          digitalWrite(LED_R, !digitalRead(LED_R));
-        }
-        sharp_L = analogRead(A3) * 0.0048828125;
-        gustavoGadao = 26 * pow(sharp_L, -1);
-
-        if  (((Esq == 0) && (Dir == 0)) || ((Esq == 1) && (Dir == 1)))  moverAngYtbm(135, 0, 135, 0);
-        if  ((Esq == 1) && (Dir == 0))  moverAngYtbm(0, 100, 150, 0);
-        if  ((Esq == 0) && (Dir == 1))  moverAngYtbm(170, 0, 0, 100);
-        if  ((angleY >= -30.00) && (angleY <= 15.00))  {
-          serv.write(10);
-          serv.detach();
-          eAnt = millis();
-          while (millis() - eAnt < 1000)  moverAngYtbm(255, 255, 255, 255);
-          MOVE(90, 0, 90, 0); delay(500);
-          return;
-        }
-      }
-    }
-  }
-    
   digitalWrite(eLED, LOW);
   digitalWrite(dLED, LOW);
 
+  if  (angleY <= -10.00)  {
+    if  ((Esq == 0) && (Dir == 0)) moverAngYtbm(140, 0, 170, 0);
+    if  ((Esq == 1) && (Dir == 0)) moverAngYtbm(140, 0, 170, 0);
+    if  ((Esq == 0) && (Dir == 1)) moverAngYtbm(170, 0, 140, 0);
+  }
+
+  if  ((angleY <= -20.00) && (gustavoGadao <= 30)) {
+    digitalWrite(LED_B, HIGH);
+    Esq = digitalRead(46);
+    MOVE(130, 0, 130, 0); delay(300);
+    eAnt = millis();
+    while (millis() - eAnt <= 300) {
+      Esq = digitalRead(46);
+      Dir = digitalRead(48);
+      if  ((Esq == 0) && (Dir == 0)) MOVE(150, 0, 150, 0);
+      if  ((Esq == 1) && (Dir == 0)) MOVE(0, 80, 150, 0);
+      if  ((Esq == 0) && (Dir == 1)) MOVE(150, 0, 0, 80);
+    }
+    
+    serv.attach(Tail);
+    serv.write(23);
+    while (Esq == 1) {
+      Esq = digitalRead(46);
+      moverAngYtbm(0, 80, 150, 0);
+    }
+    gustavoGadao = 26 * pow(sharp_L, -1);
+    MOVE(255, 255, 255, 255);
+      
+    if  (gustavoGadao <= 30) {TTR = true; MOVE(255, 255, 255, 255); delay(400);}
+    while (gustavoGadao <= 30) {
+      sharp_L = analogRead(A3) * 0.0048828125;
+      gustavoGadao = 26 * pow(sharp_L, -1);
+      Esq = digitalRead(46);
+      Dir = digitalRead(48);
+      
+      if  ((Esq == 0) && (Dir == 0)) MOVE(160, 0, 160, 0);
+      if  ((Esq == 1) && (Dir == 1)) MOVE(180, 0, 180, 0);
+      if  ((Esq == 1) && (Dir == 0)) MOVE(0, 80, 150, 0);
+      if  ((Esq == 0) && (Dir == 1)) MOVE(150, 0, 0, 80);
+    }
+  }
+
+  if  ((angleY <= -32.00) && (gustavoGadao > 30)) {
+    digitalWrite(LED_R, HIGH);
+    sharp_L = analogRead(A3) * 0.0048828125;
+    gustavoGadao = 26 * pow(sharp_L, -1);
+    Esq = digitalRead(46);
+    eAnt = millis();
+    MOVE(130, 0, 130, 0); delay(300);
+    serv.attach(Tail);
+    serv.write(22);
+    while (Esq == 1) {
+      Esq = digitalRead(46);
+      moverAngYtbm(0, 80, 150, 0);
+    }
+    while ((gustavoGadao > 30) && (TTR == false)) {
+      Esq = digitalRead(46);
+      Dir = digitalRead(48);
+      sharp_L = analogRead(A3) * 0.0048828125;
+      gustavoGadao = 26 * pow(sharp_L, -1);
+      
+      if  ((Esq == 0) && (Dir == 0)) moverAngYtbm(150, 0, 150, 0);
+      if  ((Esq == 1) && (Dir == 0)) moverAngYtbm(0, 80, 150, 0);
+      if  ((Esq == 0) && (Dir == 1)) moverAngYtbm(150, 0, 0, 80);
+      if (angleY >= -20.00) {
+        serv.attach(Tail);
+        serv.write(10);
+        serv.detach();
+        moverAngYtbm(0, 0, 0, 0); delay(1000);
+        digitalWrite(LED_R, LOW);
+        angleY = 13.00;
+        while (angleY >= 3.00) {
+          digitalWrite(eLED, HIGH);
+          Esq = digitalRead(46);
+          Dir = digitalRead(48);
+          if  ((Esq == 0) && (Dir == 0)) moverAngYtbm(110, 0, 110, 0);
+          if  ((Esq == 1) && (Dir == 0)) moverAngYtbm(0, 160, 160, 0);
+          if  ((Esq == 0) && (Dir == 1)) moverAngYtbm(150, 0, 0, 150);
+        }
+        while ((extEsq == 1) && (Esq == 1)) {
+          Esq = digitalRead(46);
+          extEsq = digitalRead(42);
+          MOVE(0, 150, 150, 0);
+        }
+        while ((extEsq == 1) && (Esq == 1)) {
+          Dir = digitalRead(48);
+          extDir = digitalRead(50);
+          MOVE(200, 0, 0, 200);
+        }
+//        while (true) {MOVE(0, 0, 0, 0);};
+        return;
+      }
+    }
+  }
   
-  if  ((Esq == 1) && (Dir == 0))  {MOVE(0, 140, 150, 0);}
-  if  ((Dir == 1) && (Esq == 0))  {MOVE(170, 0, 0, 170);}
-  // TTR = true;
+  if  ((Esq == 1) && (Dir == 0) && (angleY >= -10.00))  {MOVE(0, 140, 150, 0);}
+  if  ((Dir == 1) && (Esq == 0) && (angleY >= -10.00))  {MOVE(170, 0, 0, 170);}
