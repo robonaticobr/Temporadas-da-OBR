@@ -1,5 +1,14 @@
 void doDesvio() {
-  MOVE(0, 150, 0, 150); delay(100);
+  do  {
+    if  (BOLA == false) {
+      Acc = 0;
+      for (byte i = 0; i < 5; i++) {
+        sharp_A = analogRead(A1);
+        Acc += sharp_A;
+      }
+    }
+    MOVE(0, 130, 0, 130);
+  } while (Acc >= 2600);
   MOVE(255, 255, 255, 255);
   digitalWrite(eLED, LOW);  digitalWrite(dLED, LOW);
   shineLED(LED_R, 80, 80, 1);
@@ -34,7 +43,7 @@ void doDesvio() {
   for (int i = 0; i < 10; i++)  sharp_L = analogRead(A3);
   shineLED(LED_R, 80, 80, 0);
   
-  MOVE(200, 0, 200, 0); delay(1000);
+  MOVE(170, 0, 170, 0); delay(800);
   MOVE(255, 255, 255, 255); delay(300);
   
   cDesvio(105.00);
@@ -50,7 +59,7 @@ void doDesvio() {
     MOVE(180, 0, 180, 0);
   }
   digitalWrite(eLED, LOW);
-  
+  MOVE(120, 0, 120, 0); delay(150);
   MOVE(255, 255, 255, 255); delay(300);
   cDesvio(117.00);
   angleZ = 0.01;
@@ -82,10 +91,7 @@ void doDesvio() {
     MOVE(0, 140, 0, 140);
   } while ((vdE <= VP) && (vdD <= VP));
 
-  do  {
-    Avanc = digitalRead(52);
-    viraGyro(200, 0, 0, 200);
-  } while ((Avanc == 0) || (angleZ >= -60.00));
+  deg90Dobra(-80.00, true);
   
   BOLA = true;
   return;
@@ -148,18 +154,6 @@ void segueLinha()   {
   if  ((Esq == 0) && (Dir == 1))  {MOVE(170, 0, 0, 160); Corrigiu = true;}
 }
 
-void Redutor()
-{
-  Avanc = digitalRead(52);
-  Esq = digitalRead(46);
-  Dir = digitalRead(48);
-
-  if  ((Esq == 0) && (Dir == 0))  {MOVE(170, 0, 170, 0);}
-  if  ((Esq == 1) && (Dir == 0))  {MOVE(0, 50, 210, 0);}
-  if  ((Esq == 0) && (Dir == 1))  {MOVE(190, 0, 0, 40);}
-}
-
-
 void stopForRead(byte READ, int varTime)  {
   moverAngYtbm(255, 255, 255, 255);
   if  ((mediaE() >= VP) || (mediaD() >= VP))  {
@@ -215,9 +209,9 @@ void deg90Dobra(float to, bool comp)   {
 
   if  (comp == true)  {
     if  (angleZ <= to)
-      do {Avanc = digitalRead(52); MOVE(0, 140, 190, 0);} while (Avanc == 0);
+      do {Dir = digitalRead(48); Avanc = digitalRead(52); MOVE(0, 140, 190, 0);} while ((Avanc == 0) && (Dir == 0));
     if  (angleZ >= to)
-      do {Avanc = digitalRead(52); MOVE(200, 0, 0, 200);} while (Avanc == 0);
+      do {Esq = digitalRead(46); Avanc = digitalRead(52); MOVE(200, 0, 0, 200);} while ((Avanc == 0) && (Esq == 0));
   }
   angleY = 0.01;
   angleZ = 0.01;
@@ -233,7 +227,7 @@ void deg90Dobra(float to, bool comp)   {
     extDir = digitalRead(50);
     MOVE(120, 0, 120, 0);
   }
-  MOVE(50, 0, 50, 0);
+  MOVE(70, 0, 70, 0);
   eAnt = millis();
   serv.attach(36);
   serv.write(97);
