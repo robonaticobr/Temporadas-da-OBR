@@ -1,93 +1,26 @@
-// ==================================================================================== MOTORES
-#define  motor1   7                   //  Porta PWM do motor da esquerda para a frente      -           Tag: LeftD
-#define  motor1t  6                   //  Porta PWM do motor da esquerda para trás          -           Tag: LeftR
-#define  motor2   5                   //  Porta P40WM do motor da direita para a frente       -           Tag: RightD
-#define  motor2t  4                   //  Porta PWM do motor da direita para trás           -           Tag: RightR
-
-#define Intake    11
-#define servoPort 36
-#define Tail      40
+#include <Wire.h>              // Boas vindas à biblioteca que usaremos para o giroscópio
+#include <Servo.h>
+Servo serv;
 
 
-byte Force_A = 120;
-byte Force_B = 100;
-// ==================================================================================== / MOTORES
+#define Gyro_gY0    0x2A       //  Configuração dos eixos Y do giroscópio
+#define Gyro_gY1    0x2B       //  Serão usados para identificar redutores de velocidade e a rampa
+#define Gyro_gZ0    0x2C       //  Configuração dos eixos Z do giroscópio
+#define Gyro_gZ1    0x2D       //  Serão usados para determinar curvas precisas de 90°
 
+int Gyro = 0x69;
 
-// ==================================================================================== SÓ OS VERDES
-#define eLED    22          // LED de saída para depuração de leitura
-#define LED_R   24
-#define LED_G   26
-#define LED_B   28
-#define dLED    30
+int gY0, gY1, gY_out;                     //  Transmissão de valores do eixo Y
+int gZ0, gZ1, gZ_out;                     //  Transmissão de valroes do eixo Z
 
-int vdE = A15;             // Porta analógica dos sensores
-int vdD = A14;
+float Yg, Zg;
+float angleY, angleZ, angleYc, angleZc;
+float dt = 0.015;                         // Cara importante para a conversão da transmissão para valor decimal
 
-long vdEAmount;        // Armazenar as leituras para realizar a média, respectiamente dos sensores vdE e vdD
-long vdDAmount;
+unsigned long start,finished, elapsed;    // !         Verificar para que esses caras servem
 
-long mediaE();             // Declaração da função de filtro de média dos sensores, com base  na array
-long mediaE();
-// ==================================================================================== / SÓ OS VERDES
-
-
-
-
-
-// ==================================================================================== SEnSORES DE SEGUE-LInHA
-byte Avanc   = 52;                     // As portas de configuração de pino estão sendo previamente informadas para facilitar na configuração
-byte extEsq  = 42;
-byte extDir  = 50;
-byte Esq = 46;
-byte Dir = 48;
-byte Middle  = 44;
-// ==================================================================================== / SEnSORES DE SEGUE-LInHA
-
-
-
-
-
-// ==================================================================================== SEnSORES DE PROXIMIDADE
-float sharp_A = A1;
-float sharp_L = A3;
-
-int RSPUP   = A6;
-int RSPDOWN = A7;
-
-byte Bumper = 32;
-// ==================================================================================== / SEnSORES DE PROXIMIDADE
-
-
-
-
-
-
-// ========================================================================================================= AUXILIAR EM SEGUE-LINHA
-uint8_t Other = 0;
-
-int VE = 59;                    // Valor do sensor infravermelho vdE quando vê marca verde
-int DV = 22;                    // Valor do sensor infravermelho vdD quando vê marca verde
-int VP = 300;                   // Valor geral dos sensores quando a aparente marcação verde não parece verídica
-int gustavoGadao = 0;
-int Acc = 0;
-
-
-unsigned long eAnt = 0;
-unsigned long gustavoCorno = 0;
-unsigned long blinkk = 0;
-
-unsigned long Lever = 0;
-
-long ZERO = 0;
-
-bool TTR = false;
-bool Corrigiu = false;
-bool room3 = false;                    // Identifica o fechamento do Segue-linha e à entrada ao terceiro salão
-bool allow = true;                     // Confirma a condição de curva de 90° simples para permitir ou bloquear
-bool wasGL = false;
-bool wasGR = false;
-bool subUP = false;
-bool Vision = false;
-bool BOLA = false;
-// ========================================================================================================= / AUXILIAR EM SEGUE-LINHA 
+// ========================================================================================================= AUXILIAR EM GIROSCÓPIO
+float left = 60.00;             // Este valor será usado ao pedir uma curva para a esquerda
+float right = -60.00;           // -_- -70 -_- / Este valor será usado ao pedir uma curva para a direita
+float pAng = 5.00;
+// =========================================================================================================/ AUXILIAR EM GIROSCÓPIO
