@@ -2,8 +2,6 @@ void loop() {
   digitalWrite(LED_R, LOW);
   digitalWrite(LED_G, LOW);
   digitalWrite(LED_B, LOW);
-  Acc = 0;
-  
   Esq = digitalRead(46);
   Dir = digitalRead(48);
   extEsq = digitalRead(42); extDir = digitalRead(50);
@@ -11,6 +9,9 @@ void loop() {
   Middle = digitalRead(44);
   Bumper = !digitalRead(32);
   eAnt = millis();
+
+  
+  Acc = 0;
 
   if  (BOLA == false) {
     for (byte i = 0; i < 5; i++) {
@@ -30,7 +31,7 @@ void loop() {
   if  (Bumper == 1) {
     eAnt = millis();
     digitalWrite(LED_B, HIGH);
-//    while (millis() - eAnt < 800)  {
+//    while (millis() - eAnt < 800)  {$
 //      Esq = digitalRead(46);
 //      Dir = digitalRead(48);
 //      if  (((Esq == 0) && (Dir == 0)) || ((Esq == 1) && (Dir == 1)))  MOVE(240, 0, 240, 0);
@@ -51,108 +52,128 @@ void loop() {
   
   if  (((extEsq == 1) && (Esq == 1)) || ((extDir == 1) && (Dir == 1)))  {
     shineLED(LED_G, eLED, dLED, 0);
+    if  ((outroBool == true) && (extEsq == 0) && (extDir == 1) {
+      outroBool = false;
+      MOVE(0, 140, 0, 140);
+      delay(400);
+      return loop;
+    }
+    if  ((outroBool == true) && (extEsq == 1) && (extDir == 0) {
+      outroBool = false;
+      MOVE(0, 140, 0, 140);
+      delay(400);
+      return loop;
+    }
     stopForRead(4, 270);
     extEsq = digitalRead(42); extDir = digitalRead(50);
-
     if  ((extEsq == 1) && (extDir == 1))  {
+      
       if  ((mediaE() < VP) && (mediaD() < VP))
       {
         if  ((mediaE() >= VE) && (mediaD() >= DV))  {
           shineLED(LED_B, eLED, dLED, 1);
           deg180Dobra(0.00, true);
+          shineLED(LED_B, eLED, dLED, 0);
+          return loop;
         }
-        shineLED(LED_B, eLED, dLED, 0);
-        return;
       }
+      
       if  ((mediaE() >= VE) && (mediaE() < VP))
       {
         shineLED(LED_G, eLED, dLED, 1);
         isIt90();
         deg90Dobra(left, true);
         shineLED(LED_G, eLED, dLED, 0);
-        return;
+        return loop;
       }
+      
       if  ((mediaD() >= DV) && (mediaD() < VP)) {
         isIt90();
         shineLED(LED_G, eLED, dLED, 1);
         deg90Dobra(right, true);
         shineLED(LED_G, eLED, dLED, 0);
-        return;
+        return loop;
       }
+      
       if  ((mediaE() < VE) && (mediaD() < DV))  {
         shineLED(80, eLED, dLED, 1);
         isIt90();
         whiteAhead();
         shineLED(80, eLED, dLED, 0);
-        return;        
+        return loop;
       }
-    }    
+    }
+
     if  ((extEsq == 1) && (extDir == 0))  {
       if  ((mediaE() >= VE) && (mediaE() < VP)) wasGL = true;
       if  (mediaE() < VE) wasGL = false;
-      shineLED(eLED, 80, 80, 1);
       if  ((mediaE() < VP) && (mediaD() < VP)){
         if  ((mediaE() >= VE) && (mediaD() >= DV))  {
           shineLED(LED_B, eLED, 80, 1);
           deg180Dobra(0.00, true);
           shineLED(LED_B, eLED, 80, 0);
-          return;
+          return loop;
         }
       }
-      shineLED(80, eLED, 80, 1);
+      outroBool = true;
+      shineLED(eLED, 80, 80, 1);
       isIt90();
-      MOVE(0, 100, 0, 100);
       if  (allow == true) {
         shineLED(80, eLED, 80, 1);
         deg90Dobra(left, true);
         shineLED(80, eLED, 80, 0);
-        return;
+        return loop;
       }
+      
       if  (wasGL == true) {
         shineLED(LED_G, eLED, 80, 1);
         deg90Dobra(left, true);
         shineLED(LED_G, eLED, 80, 0);
-        return;
+        return loop;
       }
+      
       else  {
         shineLED(80, eLED, 80, 1);
         whiteAhead();
         shineLED(80, eLED, 80, 0);
+        return loop;
       }
     }
+    
     if  ((extEsq == 0) && (extDir == 1))  {
-      MOVE(100, 0, 100, 0);
       if  ((mediaD() >= DV) && (mediaD() < VP)) wasGR = true;
       if  (mediaD() < DV) wasGR = false;
-      shineLED(80, 80, dLED, 1);
       if  ((mediaE() < VP) && (mediaD() < VP))  {
         if  ((mediaE() >= VE) && (mediaD() >= DV))  {
           shineLED(LED_B, 80, dLED, 1);
           deg180Dobra(0.00, true);
           shineLED(LED_B, 80, dLED, 0);
-          return;
+          return loop;
         }
       }
+      outroBool = true;
       isIt90();
-      MOVE(255, 255, 255, 255);
       if  (allow == true) {
         shineLED(80, 80, dLED, 1);
         deg90Dobra(right, true);
         shineLED(80, 80, dLED, 0);
-        return;
+        return loop;
       }
+      
       if  (wasGR == true) {
         shineLED(LED_G, 80, dLED, 1);
         deg90Dobra(right, true);
         shineLED(LED_G, 80, dLED, 0);
-        return;
+        return loop;
       }
       else  {
         shineLED(80, 80, dLED, 1);
         whiteAhead();
         shineLED(80, 80, dLED, 1);
+        return loop;
       }
     }
+    
   }
   digitalWrite(eLED, LOW);
   digitalWrite(dLED, LOW);
