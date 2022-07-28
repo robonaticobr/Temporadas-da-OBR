@@ -426,11 +426,11 @@ void deg180Dobra(float mError, bool comp)  {
   shineLED(LED_B, eLED, dLED, 1);
   if  ((mediaE() >= VE) && (mediaD() >= DV))  {
     do    {
-      viraGyro(190, 0, 0, 220);
+      viraGyro(180, 0, 0, 220);
     } while   (angleZ >= -170.00 - mError);
     if  (comp == true)  {
       do    {
-        MOVE(190, 0, 0, 220);
+        MOVE(180, 0, 0, 220);
         Esq = digitalRead(46);
       } while   (Esq == 0);
     }
@@ -484,11 +484,11 @@ void whiteAhead()  {
 long mediaE() {
   vdE = analogRead(A15);
   long JoinE = 0;
-  for (int i = 0; i < 20; i++)  {
+  for(int i = 0; i<20; i++)  {
     vdE = analogRead(A15);
     JoinE += vdE;
   }
-  return JoinE / 4 - 200;
+  return JoinE/4 - 200;
 }
 long mediaD() {
   vdD = analogRead(A14);
