@@ -55,14 +55,5 @@ void setup() {
   }
   angleY = 0.01;
   angleZ = 0.01;
-//  while (true) {
-//    if  (BOLA == false) {
-//      Acc = 0;
-//      for (byte i = 0; i < 5; i++) {
-//        sharp_A = analogRead(A1);
-//        Acc += sharp_A;
-//      }
-//    }
-//    Serial.println(Acc);
-//  };
+  Inc = millis();
 }
