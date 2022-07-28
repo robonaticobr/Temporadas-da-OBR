@@ -25,7 +25,7 @@ void loop() {
   sharp_L = analogRead(A3) * 0.0048828125;
   gustavoGadao = 26 * pow(sharp_L, -1);
 
-  if  ((Esq == 0) && (Dir == 0) && (angleY >= -10.00))  moverAngYtbm(115, 0, 115, 0);
+  if  ((Esq == 0) && (Dir == 0) && (angleY >= -10.00))  moverAngYtbm(120, 0, 120, 0);
 
   if  ((millis() - Inc >= 600) && (angleY >= -6.00)) {Inc = millis(); angleY = 0.01; digitalWrite(LED_G, HIGH);}
   
@@ -102,7 +102,8 @@ void loop() {
       return loop;
     }
     extEsq = digitalRead(42); extDir = digitalRead(50);
-    stopForRead(5, 220);
+    stopForRead(5, 230);
+    outroBool = true;
     if  ((extEsq == 1) && (extDir == 1))  {
       
       if  ((mediaE() < VP) && (mediaD() < VP))
@@ -285,11 +286,17 @@ void loop() {
         serv.attach(Tail);
         serv.write(10);
         serv.detach();
-        moverAngYtbm(255, 255, 255, 255); delay(1000);
+        eAnt = millis();
+        while (millis() - eAnt <= 300) {
+          moverAngYtbm(255, 255, 255, 255);
+        }
+        while (millis() - eAnt <= 1000) {
+          if  (angleY >= 10.00) digitalWrite(eLED, HIGH);
+          else digitalWrite(eLED, LOW);
+          moverAngYtbm(0, 0, 0, 0);
+        }
         digitalWrite(LED_R, LOW);
-        angleY = 10.00;
-        return loop;
-        while (angleY >= 5.00) {
+        while (angleY >= 10.00) {
           digitalWrite(eLED, HIGH);
           Esq = digitalRead(46);
           Dir = digitalRead(48);
@@ -300,12 +307,12 @@ void loop() {
         while ((extEsq == 1) && (Esq == 1)) {
           Esq = digitalRead(46);
           extEsq = digitalRead(42);
-          MOVE(0, 150, 150, 0);
+          moverAngYtbm(0, 150, 150, 0);
         }
         while ((extDir == 1) && (Dir == 1)) {
           Dir = digitalRead(48);
           extDir = digitalRead(50);
-          MOVE(200, 0, 0, 200);
+          moverAngYtbm(200, 0, 0, 200);
         }
       }
     }
