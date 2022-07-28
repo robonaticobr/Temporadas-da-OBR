@@ -50,6 +50,10 @@
       MOVE(130, 0, 130, 0); delay(1000);
       MOVE(0, 0, 0, 0); delay(300);
       CAVALU(200.00, true, 1200);
+      serv.attach(15);
+      serv.write(180);
+      delay(600);
+      serv.detach();
       riseServo(3000);
       Broom(10);
       do  viraGyro(170, 0, 0, 170); while (angleZ >= -52.00); angleZ = 0.01;
@@ -103,6 +107,10 @@
         CAVALU(-80.00, false, 0);
         MOVE(130, 0, 160, 0); delay(1600);
         CAVALU(90.00, true, 1200);
+        serv.attach(15);
+        serv.write(180);
+        delay(600);
+        serv.detach();
         riseServo(3000);
         do  viraGyro(0, 60, 190, 0); while (angleZ <= 45.00); angleZ = 0.01;
         Broom(0);
@@ -131,6 +139,10 @@
         analogWrite(Intake, 255);
         MOVE(150, 0, 150, 0); delay(700);
         CAVALU(-70.00, true, 1500);
+        serv.attach(15);
+        serv.write(180);
+        delay(600);
+        serv.detach();
         riseServo(3000);
         do  viraGyro(180, 0, 0, 80); while (angleZ >= -70.00);  angleZ = 0.01;
         Broom(0);
