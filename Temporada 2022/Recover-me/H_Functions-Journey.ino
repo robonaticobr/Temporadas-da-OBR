@@ -1,4 +1,4 @@
-void doDesvio() {
+void rightDetour()  {
   do  {
     if  (BOLA == false) {
       Acc = 0;
@@ -16,17 +16,171 @@ void doDesvio() {
   Avanc = digitalRead(52);
   Esq = digitalRead(46);
   Dir = digitalRead(48);
-  
+  MOVE(120, 0, 120, 0); delay(150);
   do  {
     sharp_A = analogRead(A1);
     MOVE(200, 0, 0, 200);
   } while (sharp_A >= 80.00);
-  do  viraGyro(200, 0, 0, 200); while (angleZ >= -78.00);
+  do  viraGyro(200, 0, 0, 170); while (angleZ >= -40.00);
+  do  {
+    Distance = map(sharpLAverage(), 470, 96, 5, 23);
+    Serial.println(Distance);
+    MOVE(140, 0, 140, 0);
+  } while (Distance >= 19);
+  extEsq = 0; Esq = 0; Middle = 0;
+  angleZ = 0.01;
+  while (angleZ <= 18000.00)  {
+    if  (angleZ >= 88.00) {
+      angleZ = 0.01;
+      do  viraGyro(0, 150, 180, 0); while (angleZ <= 42.00);
+      Distance = map(sharpLAverage(), 470, 96, 5, 23);
+      while (Distance >= 22) {
+        Distance = map(sharpLAverage(), 470, 96, 5, 23);
+        MOVE(130, 0, 130, 0);
+      }
+//      MOVE(0, 150, 0, 150); delay(700);
+//      angleZ = 0.01;
+//      do  viraGyro(200, 0, 0, 200); while (angleZ >= -13.00);
+//      while (Distance >= 22) {
+//        Distance = map(sharpLAverage(), 470, 96, 5, 23);
+//        MOVE(130, 0, 130, 0);
+//      } extEsq = 0;
+//      while (extEsq == 0)  {
+//        extEsq = digitalRead(42);
+//        MOVE(130, 0, 130, 0);
+//      }
+//      MOVE(130, 0, 130, 0); delay(300);
+//      Middle = 0;
+//      while (Middle == 0) {
+//        Middle = digitalRead(44);
+//        MOVE(0, 130, 0, 130);
+//      } angleZ = 0.01;
+//      do  viraGyro(200, 0, 0, 200); while (angleZ >= -60.00); Avanc = 0;
+//      while (Avanc == 0)  {
+//        Avanc = digitalRead(52);
+//        MOVE(200, 0, 0, 200);
+//      }
+//      MOVE(0, 110, 0, 130); delay(550);
+      return loop;
+    }
+    Distance = map(sharpLAverage(), 470, 96, 5, 23);
+    //    Serial.println(Distance);
+    if  (Distance <= 19)  viraGyro(0, 30, 130, 0);
+    if  (Distance > 19)  viraGyro(100, 0, 100, 0);
+  }
+}
+
+//void rightDetour() {
+//  do  {
+//    if  (BOLA == false) {
+//      Acc = 0;
+//      for (byte i = 0; i < 5; i++) {
+//        sharp_A = analogRead(A1);
+//        Acc += sharp_A;
+//      }
+//    }
+//    MOVE(0, 130, 0, 130);
+//  } while (Acc >= 2600);
+//  MOVE(255, 255, 255, 255);
+//  digitalWrite(eLED, LOW);  digitalWrite(dLED, LOW);
+//  shineLED(LED_R, 80, 80, 1);
+//  delay(300);
+//  Avanc = digitalRead(52);
+//  Esq = digitalRead(46);
+//  Dir = digitalRead(48);
+//  do  {
+//    sharp_A = analogRead(A1);
+//    MOVE(200, 0, 0, 200);
+//  } while (sharp_A >= 80.00);
+//  do  viraGyro(200, 0, 0, 200); while (angleZ >= -78.00);
+//  do  {
+//    extEsq = digitalRead(42);
+//    extDir = digitalRead(50);
+//    if  (extEsq == 0)  MOVE(0, 130, 0, 130);
+////    if  ((extEsq == 1) && (extDir == 0))  MOVE(60, 0, 0, 130);
+////    if  ((extEsq == 0) && (extDir == 1))  MOVE(0, 130, 60, 0);
+//  } while (extEsq == 0);
+//  Middle = digitalRead(44);
+//  extEsq = digitalRead(42);
+//  do  {
+//    Middle = digitalRead(44);
+//    extEsq = digitalRead(42);
+//    if  ((Middle == 0) && (extEsq == 0)) MOVE(120, 0, 120, 0);
+//    if  ((Middle == 1) && (extEsq == 0)) MOVE(140, 0, 0, 0);
+//    if  ((Middle == 0) && (extEsq == 1)) MOVE(0, 0, 140, 0);
+//  } while ((Middle == 0) && (extEsq == 0));
+//  MOVE(255, 255, 255, 255); delay(300);
+//  angleZ = 0.01;
+//
+//  for (int i = 0; i < 10; i++)  sharp_L = analogRead(A3);
+//  shineLED(LED_R, 80, 80, 0);
+//
+//  while (vdE <= VP) {
+//    vdE = analogRead(A15);
+//    digitalWrite(LED_G, HIGH);
+//    MOVE(170, 0, 170, 0);
+//  }
+//  digitalWrite(LED_G, LOW);
+//  MOVE(170, 0, 170, 0); delay(1100);
+//  MOVE(255, 255, 255, 255); delay(300);
+//  MOVE(0, 0, 0, 0); while (true);
+//
+//  cDesvio(116.00);
+//  MOVE(255, 255, 255, 255); delay(300);
+//  digitalWrite(eLED, HIGH);
+//  MOVE(180, 0, 180, 0); delay(700);
+//  digitalWrite(eLED, LOW);
+//  MOVE(255, 255, 255, 255); delay(300);
+//
+//  do  viraGyro(0, 160, 170, 0); while (angleZ <= 110.00);
+//  MOVE(255, 255, 255, 255);
+//  angleZ = 0.01;
+//  do  {
+//    sharp_L = analogRead(A3);
+//    extEsq = digitalRead(42);
+//    if  (extEsq == 1) digitalWrite(eLED, HIGH);
+//    else digitalWrite(eLED, LOW);
+//    MOVE(150, 0, 150, 0);
+//  } while (sharp_L <= 200.00);
+//  delay(160);
+////  MOVE(255, 255, 255, 255); delay(300);
+//  while (extEsq == 0) {
+//    extEsq = digitalRead(42);
+//    MOVE(140, 0, 150, 0);
+//  }
+////  do  viraGyro(200, 0, 0, 200); while (angleZ >= -90.00);
+//  angleZ = 0.01;
+//}
+
+void leftDetour() {
+  do  {
+    if  (BOLA == false) {
+      Acc = 0;
+      for (byte i = 0; i < 5; i++) {
+        sharp_A = analogRead(A1);
+        Acc += sharp_A;
+      }
+    }
+    MOVE(0, 130, 0, 130);
+  } while (Acc >= 2600);
+  MOVE(255, 255, 255, 255);
+  digitalWrite(eLED, LOW);  digitalWrite(dLED, LOW);
+  shineLED(LED_R, 80, 80, 1);
+  delay(300);
+  Avanc = digitalRead(52);
+  Esq = digitalRead(46);
+  Dir = digitalRead(48);
+  do  {
+    sharp_A = analogRead(A1);
+    MOVE(0, 160, 160, 0);
+  } while (sharp_A >= 80.00);
+  angleZ = 0.01;
+  do  viraGyro(0, 160, 160, 0); while (angleZ <= 85.00);
   do  {
     Avanc = digitalRead(52);
     MOVE(0, 130, 0, 130);
   } while (Avanc == 0);
-  
+
   MOVE(0, 150, 0, 150); delay(300);
   Middle = digitalRead(44);
   extEsq = digitalRead(42);
@@ -42,59 +196,43 @@ void doDesvio() {
 
   for (int i = 0; i < 10; i++)  sharp_L = analogRead(A3);
   shineLED(LED_R, 80, 80, 0);
-  
-  MOVE(170, 0, 170, 0); delay(800);
+  MOVE(170, 0, 170, 0); delay(1100);
+  MOVE (255, 255, 255, 255); delay(300);
+  cDesvio(-90.00);
+  MOVE (255, 255, 255, 255); delay(300);
+  do  {
+    RSPDOWN = analogRead(A7);
+    MOVE(170, 0, 170, 0);
+  } while (RSPDOWN <= 200.00);
+  digitalWrite(dLED, HIGH);
+  MOVE(190, 0, 190, 0); delay(730);
+  digitalWrite(dLED, LOW);
   MOVE(255, 255, 255, 255); delay(300);
-  
-  cDesvio(105.00);
+  cDesvio(110.00);
   MOVE(255, 255, 255, 255); delay(300);
-  
-  while (sharp_L <= 200.00)  {
+  do  {
     sharp_L = analogRead(A3);
-    MOVE(180, 0, 180, 0);
-  }
-  while (sharp_L >= 100.00)  {
-    digitalWrite(eLED, HIGH);
-    sharp_L = analogRead(A3);
-    MOVE(180, 0, 180, 0);
-  }
-  digitalWrite(eLED, LOW);
-  MOVE(120, 0, 120, 0); delay(150);
-  MOVE(255, 255, 255, 255); delay(300);
-  cDesvio(117.00);
-  angleZ = 0.01;
-  
-  while ((Avanc == 0) || (angleZ >= -90.00))  {
-    Avanc = digitalRead(52);
-    Dir = digitalRead(48);
-    if  (Dir == 0)  viraGyro(120, 0, 120, 0);
-    else {do viraGyro(200, 0, 0, 200); while ((angleZ >= -90.00) || (Avanc == 0));}
-  }
-  angleZ = 0.01;
-  MOVE(255, 255, 255, 255); delay(600);
-  
-//  do {
-//    extEsq = digitalRead(42);
-//    extDir = digitalRead(50);
-//    MOVE(0, 150, 0, 150);
-//  } while ((extEsq == 1) || (extDir == 1));                   // MODO 1
-  angleZ = 0.01;
-
-  MOVE(255, 255, 255, 255); delay(600);
-
-  MOVE(130, 0, 130, 0); delay(500);
-
+    extDir = digitalRead(50);
+    if  (extDir == 1) digitalWrite(dLED, HIGH);
+    else digitalWrite(dLED, LOW);
+    MOVE(0, 160, 0, 160);
+  } while (sharp_L <= 200.00);
   do  {
     vdE = analogRead(A15);
-    vdD = analogRead(A14);
-
-    MOVE(0, 140, 0, 140);
-  } while ((vdE <= VP) && (vdD <= VP));
-
-  deg90Dobra(-80.00, true);
-  
-  BOLA = true;
-  return;
+    MOVE(0, 150, 0, 150);
+  } while (vdE <= VP);
+  do  {
+    extEsq = digitalRead(50);
+    MOVE(0, 150, 0, 150);
+  } while (extEsq == 0);
+  MOVE(150, 0, 150, 0); delay(160);
+  MOVE(255, 255, 255, 255); delay(300);
+  angleZ = 0.01;
+  do  viraGyro(200, 0, 0, 200); while (angleZ >= -90.00);
+  while ((angleZ >= -110.00) && (Avanc == 0)) {
+    Avanc = digitalRead(52);
+    viraGyro(200, 0, 0, 200);
+  }
 }
 
 void MOVE(byte m1, byte m1t, byte m2, byte m2t) {
@@ -149,9 +287,17 @@ void segueLinha()   {
   Esq = digitalRead(46);
   Dir = digitalRead(48);
 
-  if  ((Esq == 0) && (Dir == 0))  {MOVE(130, 0, 130, 0);}
-  if  ((Esq == 1) && (Dir == 0))  {MOVE(0, 160, 170, 0); Corrigiu = true;}
-  if  ((Esq == 0) && (Dir == 1))  {MOVE(170, 0, 0, 160); Corrigiu = true;}
+  if  ((Esq == 0) && (Dir == 0))  {
+    MOVE(130, 0, 110, 0);
+  }
+  if  ((Esq == 1) && (Dir == 0))  {
+    MOVE(0, 140, 140, 0);
+    Corrigiu = true;
+  }
+  if  ((Dir == 1) && (Esq == 0))  {
+    MOVE(170, 0, 0, 180);
+    Corrigiu = true;
+  }
 }
 
 void stopForRead(byte READ, int varTime)  {
@@ -162,19 +308,13 @@ void stopForRead(byte READ, int varTime)  {
       if  ((mediaE() >= VP) && (mediaD() < VP))   moverAngYtbm(0, 190, 0, 0);
       if  ((mediaE() < VP) && (mediaD() >= VP))   moverAngYtbm(0, 0, 0, 190);
     }
-    return;
+    return loop;
   }
   for (int i = READ; i > 0; i--)  {
-    // if  ((Esq == 0) && (Dir == 1) && (extDir == 0))  MOVE(100, 0, 0, 100);
-    // if  ((Esq == 1) && (Dir == 0) && (extEsq == 0))  MOVE(0, 100, 100, 0);
     Serial.print(mediaE()); Serial.print(" | "); Serial.println(mediaD());
     delay(varTime);
   }
   allow = true;
-  // while (true)  {
-  //   Serial.print(mediaE()); Serial.print(" | "); Serial.println(mediaD());
-  //   delay(10);
-  // };
 }
 
 
@@ -184,11 +324,15 @@ void stopForRead(byte READ, int varTime)  {
 void isIt90()  {
   Corrigiu = false;
   allow = true;
+  MOVE(0, 0, 0, 0);
   Avanc = 0;
   MOVE(130, 0, 110, 0);
+  serv.detach();
   delay(300);
   eAnt = millis();
-  while (millis() - eAnt <= 230)  {segueLinha();}
+  while (millis() - eAnt <= 230)  {
+    segueLinha();
+  }
   Avanc = digitalRead(52);
   if  ((Avanc == 1) || (Corrigiu == true))  allow = false;
   if  ((Avanc == 0) && (Corrigiu == false)) allow = true;
@@ -198,20 +342,40 @@ void isIt90()  {
 
 
 void deg90Dobra(float to, bool comp)   {
+  //  do  {
+  //    extEsq = digitalRead(42);
+  //    extDir = digitalRead(50);
+  //    MOVE(0, 160, 0, 160);
+  //  } while ((extEsq == 0) && (extDir == 0));
+  //  MOVE(70, 0, 70, 0); delay(100);
+  if  ((wasGL == false) && (wasGR == false))  MOVE(150, 0, 150, 0); delay(90);
   do  {
-    extEsq = digitalRead(42);
-    extDir = digitalRead(50);
+    vdE = analogRead(A15);
+    vdD = analogRead(A14);
     MOVE(0, 160, 0, 160);
-  } while ((extEsq == 0) && (extDir == 0));
+  } while ((vdE <= VP) && (vdD <= VP));
   angleZ = 0.01;
-  do {viraGyro(0, 160, 180, 0);} while   (angleZ <= to); angleZ = 0.01;
-  do {viraGyro(200, 0, 0, 200);}  while   (angleZ >= to); angleZ = 0.01;
+
+  do {
+    viraGyro(0, 170, 180, 0);
+  } while   (angleZ <= to); angleZ = 0.01;
+  do {
+    viraGyro(190, 0, 0, 220);
+  }  while   (angleZ >= to); angleZ = 0.01;
 
   if  (comp == true)  {
     if  (angleZ <= to)
-      do {Dir = digitalRead(48); Avanc = digitalRead(52); MOVE(0, 140, 190, 0);} while ((Avanc == 0) && (Dir == 0));
+      do {
+        Dir = digitalRead(48);
+        Avanc = digitalRead(52);
+        MOVE(0, 170, 180, 0);
+      } while ((Avanc == 0) && (Dir == 0));
     if  (angleZ >= to)
-      do {Esq = digitalRead(46); Avanc = digitalRead(52); MOVE(200, 0, 0, 200);} while ((Avanc == 0) && (Esq == 0));
+      do {
+        Esq = digitalRead(46);
+        Avanc = digitalRead(52);
+        MOVE(190, 0, 0, 220);
+      } while ((Avanc == 0) && (Esq == 0));
   }
   angleY = 0.01;
   angleZ = 0.01;
@@ -220,35 +384,37 @@ void deg90Dobra(float to, bool comp)   {
   while ((extEsq == 0) && (extDir == 0))  {
     extEsq = digitalRead(42);
     extDir = digitalRead(50);
-    MOVE(0, 140, 0, 140);
+    MOVE(0, 130, 0, 130);
+    eAnt = millis();
+    serv.attach(36);
+    serv.write(97);
   }
   while ((extEsq == 1) || (extDir == 1)) {
     extEsq = digitalRead(42);
     extDir = digitalRead(50);
-    MOVE(120, 0, 120, 0);
+    MOVE(130, 0, 130, 0);
   }
-  MOVE(70, 0, 70, 0);
-  eAnt = millis();
-  serv.attach(36);
-  serv.write(97);
-  delay(300);
   serv.detach();
-//  while (millis() - eAnt < 350) {
-//    Esq = digitalRead(46);
-//    Dir = digitalRead(48);
-//    if ((Esq == 0) && (Dir == 0)) MOVE(130, 0, 150, 0);
-//    if ((Esq == 1) && (Dir == 0)) MOVE(0, 150, 160, 0);
-//    if ((Esq == 0) && (Dir == 1)) MOVE(160, 0, 0, 190);
-//  }
+  //  while (millis() - eAnt < 350) {
+  //    Esq = digitalRead(46);
+  //    Dir = digitalRead(48);
+  //    if ((Esq == 0) && (Dir == 0)) MOVE(130, 0, 150, 0);
+  //    if ((Esq == 1) && (Dir == 0)) MOVE(0, 150, 160, 0);
+  //    if ((Esq == 0) && (Dir == 1)) MOVE(160, 0, 0, 190);
+  //  }
+  VE = 60;
 }
 
 
 
 void cDesvio (float to) {
   angleZ = 0.01;
-  do {viraGyro(0, 160, 170, 0);} while   (angleZ <= to); angleZ = 0.01;
-  do {viraGyro(200, 0, 0, 170);}  while   (angleZ >= to); angleZ = 0.01;
-  
+  do {
+    viraGyro(0, 160, 170, 0);
+  } while   (angleZ <= to); angleZ = 0.01;
+  do {
+    viraGyro(200, 0, 0, 170);
+  }  while   (angleZ >= to); angleZ = 0.01;
   angleY = 0.01;
   angleZ = 0.01;
 }
@@ -258,11 +424,30 @@ void cDesvio (float to) {
 
 void deg180Dobra(float mError, bool comp)  {
   shineLED(LED_B, eLED, dLED, 1);
-  do    {viraGyro(0, 150, 120, 0);} while   (angleZ <= 170.00 - mError);
-  if  (comp == true)  {
-    do    {MOVE(0, 150, 120, 0);  Avanc = digitalRead(52);} while   (Avanc == 0);
+  if  ((mediaE() >= VE) && (mediaD() >= DV))  {
+    do    {
+      viraGyro(190, 0, 0, 220);
+    } while   (angleZ >= -170.00 - mError);
+    if  (comp == true)  {
+      do    {
+        MOVE(190, 0, 0, 220);
+        Esq = digitalRead(46);
+      } while   (Esq == 0);
+    }
+    while ((extEsq == 0) && (extDir == 0))  {
+      extEsq = digitalRead(42);
+      extDir = digitalRead(50);
+      MOVE(0, 130, 0, 130);
+      eAnt = millis();
+      serv.attach(36);
+      serv.write(97);
+    }
+    while ((extEsq == 1) || (extDir == 1)) {
+      extEsq = digitalRead(42);
+      extDir = digitalRead(50);
+      MOVE(130, 0, 130, 0);
+    }
   }
-  do  {MOVE(0, 100, 0, 100); vdE = analogRead(A15); vdD = analogRead(A14);} while ((vdE <= VP) && (vdD <= VP));
   shineLED(LED_B, eLED, dLED, 0);
   angleY = 0.01;
   angleZ = 0.01;
@@ -273,7 +458,7 @@ void deg180Dobra(float mError, bool comp)  {
 
 void whiteAhead()  {
   extEsq = digitalRead(42);
-  extDir = digitalRead(50);  
+  extDir = digitalRead(50);
   Esq = digitalRead(46);
   Dir = digitalRead(48);
   while ((extEsq == 1) && (Esq == 1))  {
@@ -299,22 +484,30 @@ void whiteAhead()  {
 long mediaE() {
   vdE = analogRead(A15);
   long JoinE = 0;
-  for(int i = 0; i<20; i++)  {
+  for (int i = 0; i < 20; i++)  {
     vdE = analogRead(A15);
     JoinE += vdE;
   }
-  return JoinE/4 - 200;
+  return JoinE / 4 - 200;
 }
 long mediaD() {
   vdD = analogRead(A14);
   long JoinD = 0;
-  for(int i = 0; i<10; i++)  {
+  for (int i = 0; i < 10; i++)  {
     vdD = analogRead(A14);
     JoinD += vdD;
   }
-  return JoinD/4 - 100;
+  return JoinD / 4 - 100;
 }
 
+float sharpLAverage() {
+  float Consequence = 0;
+  for (uint8_t i = 0; i < 100; i++)  {
+    sharp_L = analogRead(A3);
+    Consequence += sharp_L;
+  }
+  return Consequence / 100;
+}
 
 
 
