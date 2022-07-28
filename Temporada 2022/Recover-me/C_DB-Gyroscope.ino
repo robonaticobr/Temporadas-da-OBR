@@ -20,7 +20,7 @@ float dt = 0.015;                         // Cara importante para a conversão d
 unsigned long start,finished, elapsed;    // !         Verificar para que esses caras servem
 
 // ========================================================================================================= AUXILIAR EM GIROSCÓPIO
-float left = 60.00;             // Este valor será usado ao pedir uma curva para a esquerda
-float right = -60.00;           // -_- -70 -_- / Este valor será usado ao pedir uma curva para a direita
+float left = 90.00;             // Este valor será usado ao pedir uma curva para a esquerda
+float right = -80.00;           // -_- -70 -_- / Este valor será usado ao pedir uma curva para a direita
 float pAng = 5.00;
 // =========================================================================================================/ AUXILIAR EM GIROSCÓPIO
