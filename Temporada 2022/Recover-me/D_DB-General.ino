@@ -14,7 +14,6 @@ byte Force_B = 100;
 // ==================================================================================== / MOTORES
 
 
-
 // ==================================================================================== SÓ OS VERDES
 #define eLED    22          // LED de saída para depuração de leitura
 #define LED_R   24
@@ -34,6 +33,8 @@ long mediaE();
 
 
 
+
+
 // ==================================================================================== SEnSORES DE SEGUE-LInHA
 byte Avanc   = 52;                     // As portas de configuração de pino estão sendo previamente informadas para facilitar na configuração
 byte extEsq  = 42;
@@ -42,6 +43,8 @@ byte Esq = 46;
 byte Dir = 48;
 byte Middle  = 44;
 // ==================================================================================== / SEnSORES DE SEGUE-LInHA
+
+
 
 
 
@@ -57,23 +60,39 @@ byte Bumper = 32;
 
 
 
+
+
+
 // ========================================================================================================= AUXILIAR EM SEGUE-LINHA
-int VE = 55;                    // Valor do sensor infravermelho vdE quando vê marca verde
-int DV = 22;                    // Valor do sensor infravermelho vdD quando vê marca verde
+float Consequence = 0;
+
+uint8_t Other = 0;
+
+int VE = 65;                    // Valor do sensor infravermelho vdE quando vê marca verde
+int DV = 23;                    // Valor do sensor infravermelho vdD quando vê marca verde
 int VP = 300;                   // Valor geral dos sensores quando a aparente marcação verde não parece verídica
 int gustavoGadao = 0;
+int Acc = 0;
+int Distance = 0;
+
 
 unsigned long eAnt = 0;
 unsigned long gustavoCorno = 0;
 unsigned long blinkk = 0;
+unsigned long SirensPJ = 0;
+unsigned long Lever = 0;
+unsigned long Inc = 0;
 
 long ZERO = 0;
 
-bool TTR = false;
+bool TTR = false;                      // Identifica o fechamento do Segue-linha e à entrada ao terceiro salão
 bool Corrigiu = false;
-bool room3 = false;                    // Identifica o fechamento do Segue-linha e à entrada ao terceiro salão
+bool turnBack = false;
 bool allow = true;                     // Confirma a condição de curva de 90° simples para permitir ou bloquear
 bool wasGL = false;
 bool wasGR = false;
 bool subUP = false;
+bool Vision = false;
+bool BOLA = false;
+bool outroBool = true;
 // ========================================================================================================= / AUXILIAR EM SEGUE-LINHA 
