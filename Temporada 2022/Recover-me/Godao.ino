@@ -1,7 +1,9 @@
  /*
- * Programação do segue linha Godão v1.0
+ * Programação do segue linha UnnamedRobot v1
+ * Arquivo experimental de variáveis de segue linha - UnnamedRobot v1.1
+ * Arquivo experimental do Setup do robô - UnnamedRobot v1.1
  * 
- * Autor: Colin Lucas Batista Beluco
+ * Autores: Colin Lucas Batista Beluco; Marcelo Carvalho
  * 
  * Objetivo: Robô autônomo seguidor de linha e resgate
  * 
@@ -14,5 +16,3 @@
 
 
 String ORGULHO_DE_SER_ROBONATICO = "    7565    ";
-String NOS_DIVERTIMOS = "Comemoramos os erros e os acertos";
-String Erros = "Existe para ser acertado";
