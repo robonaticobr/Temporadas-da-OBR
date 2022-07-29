@@ -402,7 +402,6 @@ void deg90Dobra(float to, bool comp)   {
   //    if ((Esq == 1) && (Dir == 0)) MOVE(0, 150, 160, 0);
   //    if ((Esq == 0) && (Dir == 1)) MOVE(160, 0, 0, 190);
   //  }
-  VE = 60;
 }
 
 
