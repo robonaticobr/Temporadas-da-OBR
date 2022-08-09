@@ -8,6 +8,7 @@ void rightDetour()  {
       }
     }
     MOVE(0, 130, 0, 130);
+    MOVE(0, 130, 0, 130); delay(200);
   } while (Acc >= 2600);
   MOVE(255, 255, 255, 255);
   digitalWrite(eLED, LOW);  digitalWrite(dLED, LOW);
@@ -29,44 +30,27 @@ void rightDetour()  {
   } while (Distance >= 19);
   extEsq = 0; Esq = 0; Middle = 0;
   angleZ = 0.01;
-  while (angleZ <= 18000.00)  {
-    if  (angleZ >= 88.00) {
+  while (angleZ <= 92.00)  {
+    if  (angleZ >= 91.00) {
       angleZ = 0.01;
-      do  viraGyro(0, 150, 180, 0); while (angleZ <= 42.00);
+      do  viraGyro(0, 150, 180, 0); while (angleZ <= 40.00);
+      angleZ = 100.00;
       Distance = map(sharpLAverage(), 470, 96, 5, 23);
-      while (Distance >= 22) {
-        Distance = map(sharpLAverage(), 470, 96, 5, 23);
+      extEsq = digitalRead(42);
+      while (extEsq == 0) {
+        extEsq = digitalRead(42);
         MOVE(130, 0, 130, 0);
+        angleZ = 20000.00;
       }
-//      MOVE(0, 150, 0, 150); delay(700);
-//      angleZ = 0.01;
-//      do  viraGyro(200, 0, 0, 200); while (angleZ >= -13.00);
-//      while (Distance >= 22) {
-//        Distance = map(sharpLAverage(), 470, 96, 5, 23);
-//        MOVE(130, 0, 130, 0);
-//      } extEsq = 0;
-//      while (extEsq == 0)  {
-//        extEsq = digitalRead(42);
-//        MOVE(130, 0, 130, 0);
-//      }
-//      MOVE(130, 0, 130, 0); delay(300);
-//      Middle = 0;
-//      while (Middle == 0) {
-//        Middle = digitalRead(44);
-//        MOVE(0, 130, 0, 130);
-//      } angleZ = 0.01;
-//      do  viraGyro(200, 0, 0, 200); while (angleZ >= -60.00); Avanc = 0;
-//      while (Avanc == 0)  {
-//        Avanc = digitalRead(52);
-//        MOVE(200, 0, 0, 200);
-//      }
-//      MOVE(0, 110, 0, 130); delay(550);
-      return loop;
+      MOVE(0, 130, 0, 130); delay(500);
+      angleZ = 0.01;
+      do  viraGyro(200, 0, 0, 200); while (angleZ >= -30.00);
+      break;
     }
     Distance = map(sharpLAverage(), 470, 96, 5, 23);
     //    Serial.println(Distance);
-    if  (Distance <= 19)  viraGyro(0, 30, 130, 0);
-    if  (Distance > 19)  viraGyro(100, 0, 100, 0);
+    if  (Distance <= 21)  viraGyro(0, 30, 130, 0);
+    if  (Distance > 21)  viraGyro(115, 0, 115, 0);
   }
 }
 
@@ -302,16 +286,16 @@ void segueLinha()   {
 
 void stopForRead(byte READ, int varTime)  {
   moverAngYtbm(255, 255, 255, 255);
-  if  ((mediaE() >= VP) || (mediaD() >= VP))  {
-    while ((mediaE() >= VP) || (mediaD() >= VP))  {
-      if  ((mediaE() >= VP) && (mediaD() >= VP))  moverAngYtbm(0, 140, 0, 140);
-      if  ((mediaE() >= VP) && (mediaD() < VP))   moverAngYtbm(0, 190, 0, 0);
-      if  ((mediaE() < VP) && (mediaD() >= VP))   moverAngYtbm(0, 0, 0, 190);
+  if  ((mediaE() >= 4500) || (mediaD() >= 900))  {
+    while ((mediaE() >= 4500) || (mediaD() >= VP))  {
+      if  ((mediaE() >= 4500) && (mediaD() >= 900))  moverAngYtbm(0, 140, 0, 140);
+      if  ((mediaE() >= 4500) && (vdD < VP))   moverAngYtbm(0, 190, 0, 0);
+      if  ((vdE < VP) && (mediaD() >= 900))   moverAngYtbm(0, 0, 0, 190);
     }
     return;
   }
   for (int i = READ; i > 0; i--)  {
-    Serial.print(mediaE()); Serial.print(" | "); Serial.println(mediaD());
+    Serial.print(vdE); Serial.print(" | "); Serial.println(vdD);
     delay(varTime);
   }
   allow = true;
@@ -330,12 +314,14 @@ void isIt90()  {
   serv.detach();
   delay(300);
   eAnt = millis();
-  while (millis() - eAnt <= 300)  {
+  while ((millis() - eAnt <= 300) && (extEsq == 0) && (extDir == 0))  {
+    extEsq = digitalRead(42);
+    extDir = digitalRead(50);
     segueLinha();
   }
   Avanc = digitalRead(52);
   if  ((Avanc == 1) || (Corrigiu == true))  allow = false;
-  if  ((Avanc == 0) && (Corrigiu == false)) allow = true;
+  if  (((Avanc == 0) && (Corrigiu == false)) || (extEsq == 1) || (extDir == 1)) allow = true;
 }
 
 
@@ -396,13 +382,13 @@ void deg90Dobra(float to, bool comp)   {
   }
   serv.detach();
   MOVE(70, 0, 70, 0); delay(300);
-    while (millis() - eAnt < 350) {
-      Esq = digitalRead(46);
-      Dir = digitalRead(48);
-      if ((Esq == 0) && (Dir == 0)) MOVE(130, 0, 150, 0);
-      if ((Esq == 1) && (Dir == 0)) MOVE(0, 150, 160, 0);
-      if ((Esq == 0) && (Dir == 1)) MOVE(160, 0, 0, 190);
-    }
+  while (millis() - eAnt < 350) {
+    Esq = digitalRead(46);
+    Dir = digitalRead(48);
+    if ((Esq == 0) && (Dir == 0)) MOVE(130, 0, 150, 0);
+    if ((Esq == 1) && (Dir == 0)) MOVE(0, 150, 160, 0);
+    if ((Esq == 0) && (Dir == 1)) MOVE(160, 0, 0, 190);
+  }
 }
 
 
@@ -424,29 +410,27 @@ void cDesvio (float to) {
 
 void deg180Dobra(float mError, bool comp)  {
   shineLED(LED_B, eLED, dLED, 1);
-  if  ((mediaE() >= VE) && (mediaD() >= DV))  {
+  do    {
+    viraGyro(180, 0, 0, 220);
+  } while   (angleZ >= -170.00 - mError);
+  if  (comp == true)  {
     do    {
-      viraGyro(180, 0, 0, 220);
-    } while   (angleZ >= -170.00 - mError);
-    if  (comp == true)  {
-      do    {
-        MOVE(180, 0, 0, 220);
-        Esq = digitalRead(46);
-      } while   (Esq == 0);
-    }
-    while ((extEsq == 0) && (extDir == 0))  {
-      extEsq = digitalRead(42);
-      extDir = digitalRead(50);
-      MOVE(0, 130, 0, 130);
-      eAnt = millis();
-      serv.attach(36);
-      serv.write(97);
-    }
-    while ((extEsq == 1) || (extDir == 1)) {
-      extEsq = digitalRead(42);
-      extDir = digitalRead(50);
-      MOVE(130, 0, 130, 0);
-    }
+      MOVE(180, 0, 0, 220);
+      Esq = digitalRead(46);
+    } while   (Esq == 0);
+  }
+  while ((extEsq == 0) && (extDir == 0))  {
+    extEsq = digitalRead(42);
+    extDir = digitalRead(50);
+    MOVE(0, 130, 0, 130);
+    eAnt = millis();
+    serv.attach(36);
+    serv.write(97);
+  }
+  while ((extEsq == 1) || (extDir == 1)) {
+    extEsq = digitalRead(42);
+    extDir = digitalRead(50);
+    MOVE(130, 0, 130, 0);
   }
   shineLED(LED_B, eLED, dLED, 0);
   angleY = 0.01;
@@ -479,26 +463,25 @@ void whiteAhead()  {
 }
 
 
-
-
 long mediaE() {
   vdE = analogRead(A10);
   long JoinE = 0;
-  for(int i = 0; i<20; i++)  {
+  for (int i = 0; i < 20; i++)  {
     vdE = analogRead(A10);
     JoinE += vdE;
   }
-  return JoinE/4 - 200;
+  return JoinE / 4 - 200;
 }
 long mediaD() {
   vdD = analogRead(A14);
   long JoinD = 0;
-  for(int i = 0; i<30; i++)  {
+  for (int i = 0; i < 10; i++)  {
     vdD = analogRead(A14);
     JoinD += vdD;
   }
-  return JoinD - 1380;
+  return JoinD / 4 - 100;
 }
+
 
 float sharpLAverage() {
   float Consequence = 0;
