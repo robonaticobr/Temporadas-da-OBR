@@ -51,38 +51,29 @@ void loop() {
   
   if  (Acc >= 2500.00) {
     rightDetour();
-    MOVE(100, 0, 130, 0); delay(800);
     extEsq = digitalRead(42);
-    Avanc = digitalRead(52);
-    if  (extEsq == 1) {
-      while (Avanc == 0)  {
-        Avanc = digitalRead(52);
-        MOVE(200, 0, 0, 200);
-      }
+    while (extEsq == 0) {
+      extEsq = digitalRead(42);
+      MOVE(130, 0, 130, 0);
     }
-    return;;
-//    while ((vdE <= VP) && (vdD <= VP))  {
-//      vdE = analogRead(A15);
-//      vdD = analogRead(A14);
-//      segueLinha();
+    Avanc = 0;
+    while (Avanc == 0)  {
+      Avanc = digitalRead(52);
+      MOVE(130, 0, 130, 0);
+    }
+    while (vdE >= VE) {
+      vdE = analogRead(A10);
+      MOVE(130, 0, 130, 0);
+    }
+//    do  {
+//      vdE = analogRead(A10);
+//      MOVE(0, 130, 0, 130);
+//    } while (vdE <= 800);
+//    while (Avanc == 0)  {
+//      Avanc = digitalRead(52);
+//      MOVE(0, 160, 160, 0);
 //    }
-//    MOVE(130, 0, 130, 0); delay(500);
-//    if  ((vdE >= VP) && (vdD <= VP))  {
-//      do  viraGyro(0, 160, 160, 0); while (angleZ <= 90.00);
-//      while (Avanc == 0)  {
-//        Avanc = digitalRead(52);
-//        MOVE(0, 160, 160, 0);
-//      }
-//      return;;
-//    }
-//    if  ((vdE >= VP) && (vdD <= VP))  {
-//      do  viraGyro(200, 0, 0, 200); while (angleZ >= -90.00);
-//      while (Avanc == 0)  {
-//        Avanc = digitalRead(52);
-//        MOVE(200, 0, 0, 200);
-//      }
-//      return;;
-//    }
+    return;
   }
   
   if  (((extEsq == 1) && (Esq == 1)) || ((extDir == 1) && (Dir == 1)))  {
@@ -93,46 +84,46 @@ void loop() {
       outroBool = false;
       MOVE(0, 140, 0, 140);
       delay(400);
-      return;;
+      return;
     }
     if  ((outroBool == true) && (extEsq == 1) && (extDir == 0)) {
       outroBool = false;
       MOVE(0, 140, 0, 140);
       delay(400);
-      return;;
+      return;
     }
     extEsq = digitalRead(42); extDir = digitalRead(50);
     stopForRead(5, 230);
     outroBool = true;
     if  ((extEsq == 1) && (extDir == 1))  {
       
-      if  ((mediaE() < VP) && (mediaD() < VP))
+      if  ((mediaE() < 4500) && (mediaD() < 900))
       {
         if  ((mediaE() >= VE) && (mediaD() >= DV))  {
           shineLED(LED_B, eLED, dLED, 1);
           deg180Dobra(0.00, true);
           shineLED(LED_B, eLED, dLED, 0);
-          return;;
+          return;
         }
       }
       
-      if  ((mediaE() >= VE) && (mediaE() < VP))
+      if  ((mediaE() >= VE) && (mediaE() < 4500))
       {
         shineLED(LED_G, eLED, dLED, 1);
         isIt90();
         wasGL = true;
         deg90Dobra(left, true);
         shineLED(LED_G, eLED, dLED, 0);
-        return;;
+        return;
       }
       
-      if  ((mediaD() >= DV) && (mediaD() < VP)) {
+      if  ((mediaD() >= DV) && (mediaD() < 900)) {
         isIt90();
         wasGR = true;
         shineLED(LED_G, eLED, dLED, 1);
         deg90Dobra(right, true);
         shineLED(LED_G, eLED, dLED, 0);
-        return;;
+        return;
       }
       
       if  ((mediaE() < VE) && (mediaD() < DV))  {
@@ -140,19 +131,20 @@ void loop() {
         isIt90();
         whiteAhead();
         shineLED(80, eLED, dLED, 0);
-        return;;
+        return;
       }
     }
 
     if  ((extEsq == 1) && (extDir == 0))  {
-      if  ((mediaE() >= VE) && (mediaE() < VP)) wasGL = true;
-      if  (mediaE() < VE) wasGL = false;
-      if  ((mediaE() < VP) && (mediaD() < VP)){
+      if  ((mediaE() >= VE) && (mediaE() < 4500)) wasGL = true;
+      if  (mediaE() > 4500) wasGL = false;
+      if  ((mediaE() < 4500) && (mediaD() < 900))
+      {
         if  ((mediaE() >= VE) && (mediaD() >= DV))  {
-          shineLED(LED_B, eLED, 80, 1);
+          shineLED(LED_B, eLED, dLED, 1);
           deg180Dobra(0.00, true);
-          shineLED(LED_B, eLED, 80, 0);
-          return;;
+          shineLED(LED_B, eLED, dLED, 0);
+          return;
         }
       }
       outroBool = true;
@@ -162,33 +154,34 @@ void loop() {
         shineLED(80, eLED, 80, 1);
         deg90Dobra(left, true);
         shineLED(80, eLED, 80, 0);
-        return;;
+        return;
       }
       
       if  (wasGL == true) {
         shineLED(LED_G, eLED, 80, 1);
         deg90Dobra(left, true);
         shineLED(LED_G, eLED, 80, 0);
-        return;;
+        return;
       }
       
       else  {
         shineLED(80, eLED, 80, 1);
         whiteAhead();
         shineLED(80, eLED, 80, 0);
-        return;;
+        return;
       }
     }
     
     if  ((extEsq == 0) && (extDir == 1))  {
-      if  ((mediaD() >= DV) && (mediaD() < VP)) wasGR = true;
+      if  ((mediaD() >= DV) && (mediaD() < 900)) wasGR = true;
       if  (mediaD() < DV) wasGR = false;
-      if  ((mediaE() < VP) && (mediaD() < VP))  {
+      if  ((mediaE() < 4500) && (mediaD() < 900))
+      {
         if  ((mediaE() >= VE) && (mediaD() >= DV))  {
-          shineLED(LED_B, 80, dLED, 1);
+          shineLED(LED_B, eLED, dLED, 1);
           deg180Dobra(0.00, true);
-          shineLED(LED_B, 80, dLED, 0);
-          return;;
+          shineLED(LED_B, eLED, dLED, 0);
+          return;
         }
       }
       outroBool = true;
@@ -197,20 +190,20 @@ void loop() {
         shineLED(80, 80, dLED, 1);
         deg90Dobra(right, true);
         shineLED(80, 80, dLED, 0);
-        return;;
+        return;
       }
       
       if  (wasGR == true) {
         shineLED(LED_G, 80, dLED, 1);
         deg90Dobra(right, true);
         shineLED(LED_G, 80, dLED, 0);
-        return;;
+        return;
       }
       else  {
         shineLED(80, 80, dLED, 1);
         whiteAhead();
         shineLED(80, 80, dLED, 1);
-        return;;
+        return;
       }
     }
     
