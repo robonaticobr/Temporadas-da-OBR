@@ -10,6 +10,19 @@
     serv.write(97);
     delay(300);
     serv.detach();
+//    idBase();
+    ZERO = 0;
+//    while (true)  {
+//      ZERO = 0;
+//      for (int i = 0; i < 10; i++)  {
+//        sharp_A = analogRead(A1);
+//        Serial.print(sharp_A); Serial.print(" | ");
+//        sharp_A = analogRead(A1) * 0.0048828125;
+//        gustavoCorno = 26 * pow(sharp_A, -1);
+//      }
+//      Serial.println(gustavoCorno);
+//    };
+    
     MOVE(255, 255, 255, 255); delay(1000);
     analogWrite(Intake, 255);
     MOVE(170, 0, 170, 0); delay(300);
@@ -26,20 +39,12 @@
     }
     ZERO = 0;
     MOVE(0, 0, 0, 0); delay(600);
-    MOVE(0, 200, 0, 200); delay(1800);
-    CAVALU(-92.00, false, 0);
+    MOVE(0, 200, 0, 200); delay(2000);
+    CAVALU(-95.00, false, 0);
     Vision = false;
-    while (ZERO <= 1400.00)  {
-      ZERO = 0;
-      for (int i = 0; i < 10; i++)  {
-        sharp_A = analogRead(A1);
-        ZERO += sharp_A;
-      }
-      Serial.println(ZERO);
-      MOVE(200, 0, 200, 0);
-    }
+    Broom(24);
     ZERO = 0;
-    CAVALU(90.00, true, 1000);  MOVE(255, 255, 255, 255);
+    CAVALU(110.00, true, 1200);  MOVE(255, 255, 255, 255);
     idBase();
 
     if  (ZERO >= 700) {
@@ -98,9 +103,11 @@
       Broom(0);
       MOVE(0, 0, 0, 0); delay(300);
       MOVE(0, 130, 0, 130); delay(200);
-      CAVALU(-160.00, true, 1800);
+      CAVALU(-110.00, false, 0);
+      MOVE(0, 140, 0, 140); delay(300);
+      CAVALU(-150.00, true, 1800);
       ZERO = 0;
-      idBase();
+      while (1) {idBase();};
       if  (ZERO >= 700)  {
         digitalWrite(LED_G, HIGH); delay(200); digitalWrite(LED_G, LOW);
         MOVE(150, 0, 150, 0); delay(300);
