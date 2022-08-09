@@ -68,8 +68,8 @@ float Consequence = 0;
 
 uint8_t Other = 0;
 
-int VE = 110;                   // Valor do sensor infravermelho vdE quando vê marca verde
-int DV = 90;                    // Valor do sensor infravermelho vdD quando vê marca verde
+int VE = 2000;                   // Valor do sensor infravermelho vdE quando vê marca verde
+int DV = 24;                    // Valor do sensor infravermelho vdD quando vê marca verde
 int VP = 800;                   // Valor geral dos sensores quando a aparente marcação verde não parece verídica
 int gustavoGadao = 0;
 int Acc = 0;
