@@ -18,7 +18,7 @@ void setup() {
   
   pinMode(Middle, INPUT_PULLUP);
   pinMode(extEsq, INPUT_PULLUP);      pinMode(extDir, INPUT_PULLUP);                                        // Pinos da extrema esquerda e da extrema direita
-  pinMode(vdD, INPUT_PULLUP);  pinMode(vdE, INPUT_PULLUP);                                           // Pinos dos sensores de verde. Estão configurados como PULLUP, para termos valores mais flexíveis de leitura
+  pinMode(vdD, INPUT_PULLUP);  pinMode(vdE, INPUT);                                           // Pinos dos sensores de verde. Estão configurados como PULLUP, para termos valores mais flexíveis de leitura
 
   pinMode(sharp_A, INPUT);                                                            // Pinos dos sensores infravermelhos de proximidade
   pinMode(sharp_L, INPUT);
@@ -47,6 +47,7 @@ void setup() {
   Wire.write(0x23);
   Wire.write(48);
   Wire.endTransmission();
+  
   for (uint8_t i = 0; i <= 100; i++) {
     sharp_A = analogRead(A1);
   }
