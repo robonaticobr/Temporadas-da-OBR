@@ -1,18 +1,26 @@
+float sharpAverage()  {
+  float UUUUI = 0.01;
+  for (uint8_t i = 0; i < 100; i++) {
+    sharp_A = analogRead(A1);
+    UUUUI += sharp_A;
+  }
+  return UUUUI/100;
+}
+
 void idBase() {
   digitalWrite(LED_B, LOW);
   MOVE(0, 0, 0, 0);
   delay(1000);
   int OCO = 0;
-  for(uint8_t i = 0; i<15; i++)
-  {
-    RSPUP   = analogRead(A6);
-    RSPDOWN = analogRead(A7);
-    OCO += RSPDOWN;
-  }
-  Serial.println(RSPDOWN);
+  RSPUP = analogRead(A6);
+  RSPDOWN = analogRead(A7);
+  Serial.print(RSPUP); Serial.print(" | "); Serial.println(RSPDOWN);
   ZERO = OCO;
-  if  (ZERO >= 700) digitalWrite(LED_G, HIGH);
-  else digitalWrite(LED_G, LOW);
+  if  (RSPUP <= RSPDOWN) {digitalWrite(LED_G, HIGH); digitalWrite(LED_R, LOW);}
+  else {
+    digitalWrite(LED_G, LOW);
+    digitalWrite(LED_R, HIGH);
+  }
 }
 
 void mrBean(int Delay)
@@ -48,7 +56,7 @@ void Broom(int plus)
     }
     if  (Other <= 2)  Vision = true;
     Serial.println(gustavoCorno);
-    MOVE(170, 0, 170, 0);
+    MOVE(185, 0, 170, 0);
     
   } while (Vision == false);
   MOVE(0, 0, 0, 0); delay(400);
@@ -64,10 +72,10 @@ void riseServo(int TTL)
 
   // while (true)  {serv.read();}     // // APENAS DESCOMENTE SE FOR NECESSÁRIO
   for (int i = 0; i < 2; i++) {
-    MOVE(130, 0, 130, 0);
-    delay(TTL/10);
+    MOVE(180, 0, 180, 0);
+    delay(TTL/15);
     MOVE(0, 200, 0, 200);
-    delay(TTL/10);
+    delay(TTL/15);
   }
   MOVE(0, 0, 0, 0);
   delay(1800);
